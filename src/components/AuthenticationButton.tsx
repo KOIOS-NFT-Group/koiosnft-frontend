@@ -1,9 +1,18 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useBreakpointValue } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 
 function AuthButtons() {
   const { authenticate, isAuthenticated, isAuthenticating, logout } =
     useMoralis();
+
+  const values = useBreakpointValue({
+    base: "Connect 👛",
+    md: "Connect Wallet 👛",
+  });
+
+  const valuesConnected = useBreakpointValue({
+    base: "Connected ✅",
+  });
 
   const AuthState = () => {
     if (isAuthenticated) {
@@ -12,7 +21,7 @@ function AuthButtons() {
           fontSize={{ base: "sm", md: "sm", lg: "md" }}
           onClick={() => logout()}
         >
-          Connected ✅
+          {valuesConnected}
         </Button>
       );
     } else {
@@ -26,7 +35,7 @@ function AuthButtons() {
             })
           }
         >
-          Connect Wallet 👛
+          {values}
         </Button>
       );
     }

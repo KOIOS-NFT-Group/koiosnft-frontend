@@ -1,5 +1,6 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Divider, Flex, Grid, GridItem, Text } from "@chakra-ui/layout";
+import ContentBody from "./ContentBody";
 import ContentHeader from "./ContentHeader";
 
 function Content() {
@@ -23,7 +24,7 @@ function Content() {
         <Divider border="2px" />
       </GridItem>
       <GridItem rowSpan={5}>
-        <Text>Test</Text>
+        <ContentBody />
       </GridItem>
     </Grid>
   );
