@@ -1,26 +1,18 @@
-import React from "react";
-import { useMoralis } from "react-moralis";
-import { Button, Container, Heading } from "@chakra-ui/react";
+import { Flex, Grid, GridItem } from "@chakra-ui/layout";
+import "./app.scss";
+import Content from "./components/Content";
+import Navbar from "./components/Navbar";
 
 function App() {
-  const { authenticate, isAuthenticated, isAuthenticating, logout } =
-    useMoralis();
-
-  if (isAuthenticated) {
-    return (
-      <Container>
-        <Heading>Welcome to the NFT test</Heading>
-        <Button onClick={() => logout()}>Get me out!</Button>
-      </Container>
-    );
-  }
-
   return (
-    <div>
-      <Button isLoading={isAuthenticating} onClick={() => authenticate()}>
-        Authenticate
-      </Button>
-    </div>
+    <Grid templateRows="repeat(10,1fr)" h="100vh">
+      <GridItem rowSpan={1}>
+        <Navbar></Navbar>
+      </GridItem>
+      <GridItem rowSpan={9}>
+        <Content />
+      </GridItem>
+    </Grid>
   );
 }
 
