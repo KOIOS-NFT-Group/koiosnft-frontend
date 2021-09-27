@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { NFT } from "./NFT";
+import { Text, VStack } from "@chakra-ui/react";
 
 function ContentBody() {
   const { isAuthenticated, user } = useMoralis();
@@ -8,6 +9,7 @@ function ContentBody() {
   const { account } = useMoralisWeb3Api();
 
   let amountOfNfts: NFT[] = [];
+
   const [nfts, setNfts] = useState(amountOfNfts);
   useEffect(() => {
     if (isAuthenticated) {
@@ -18,13 +20,25 @@ function ContentBody() {
           address: userAddr,
         });
         const nftArray = response.result!;
-
         setNfts(nftArray);
       };
       fetchNFTs();
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  return <h1>hi</h1>;
+  const nftBoxes = () => {
+    if (isAuthenticated) {
+      console.log(nfts);
+      <VStack>
+        {nfts.map((NFT, index) => (
+          <Text key={index}>{NFT.name}</Text>
+        ))}
+      </VStack>;
+    } else {
+      return <Text>Connect wallet lol</Text>;
+    }
+  };
+
+  return <div>{nftBoxes()}</div>;
 }
 export default ContentBody;
