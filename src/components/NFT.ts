@@ -1,4 +1,6 @@
+import { NFTKey } from "./NFTKey";
 export interface NFT {
+  id: NFTKey;
   token_address: string;
   token_id: string;
   contract_type: string;

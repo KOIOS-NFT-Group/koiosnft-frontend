@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { NFT } from "./NFT";
-import { Text, VStack } from "@chakra-ui/react";
+import { SimpleGrid, Text } from "@chakra-ui/react";
+import NftComponent from "./NftComponent";
+import { NFTKey } from "./NFTKey";
 
 function ContentBody() {
   const { isAuthenticated, user } = useMoralis();
@@ -20,7 +22,19 @@ function ContentBody() {
           address: userAddr,
         });
         const nftArray = response.result!;
-        setNfts(nftArray);
+        let fetchedNFTs: NFT[] = [];
+        for (let nft of nftArray) {
+          let key: NFTKey = {
+            token_id: nft.token_id,
+            token_address: nft.token_address,
+          };
+          let nftWithKey = {
+            id: key,
+            ...nft,
+          };
+          fetchedNFTs.push(nftWithKey);
+        }
+        setNfts(fetchedNFTs);
       };
       fetchNFTs();
     }
@@ -28,12 +42,13 @@ function ContentBody() {
 
   const nftBoxes = () => {
     if (isAuthenticated) {
-      console.log(nfts);
-      <VStack>
-        {nfts.map((NFT, index) => (
-          <Text key={index}>{NFT.name}</Text>
-        ))}
-      </VStack>;
+      return (
+        <SimpleGrid minChildWidth="120px" spacing="10px">
+          {nfts.map((nft: NFT) => (
+            <NftComponent {...nft} />
+          ))}
+        </SimpleGrid>
+      );
     } else {
       return <Text>Connect wallet lol</Text>;
     }
