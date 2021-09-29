@@ -13,6 +13,7 @@ function ContentBody() {
   let amountOfNfts: NFT[] = [];
 
   const [nfts, setNfts] = useState(amountOfNfts);
+
   useEffect(() => {
     if (isAuthenticated) {
       const userAddr = user?.get("ethAddress");
@@ -22,19 +23,8 @@ function ContentBody() {
           address: userAddr,
         });
         const nftArray = response.result!;
-        let fetchedNFTs: NFT[] = [];
-        for (let nft of nftArray) {
-          let key: NFTKey = {
-            token_id: nft.token_id,
-            token_address: nft.token_address,
-          };
-          let nftWithKey = {
-            id: key,
-            ...nft,
-          };
-          fetchedNFTs.push(nftWithKey);
-        }
-        setNfts(fetchedNFTs);
+
+        setNfts(nftArray);
       };
       fetchNFTs();
     }
@@ -44,8 +34,8 @@ function ContentBody() {
     if (isAuthenticated) {
       return (
         <SimpleGrid minChildWidth="120px" spacing="10px">
-          {nfts.map((nft: NFT) => (
-            <NftComponent {...nft} />
+          {nfts.map((nft: NFT, i) => (
+            <NftComponent key={i} {...nft} />
           ))}
         </SimpleGrid>
       );
