@@ -1,5 +1,5 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
-import { Divider, Flex, Grid, GridItem, Text } from "@chakra-ui/layout";
+import { Divider, Grid, GridItem } from "@chakra-ui/layout";
 import ContentBody from "./ContentBody";
 import ContentHeader from "./ContentHeader";
 

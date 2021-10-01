@@ -1,9 +1,11 @@
-import { Box, Button, Flex, Heading, Spacer } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
 import AuthButtons from "./AuthenticationButton";
 import ThemeButton from "./ThemeButton";
 import { useColorModeValue } from "@chakra-ui/color-mode";
+import { Network } from "../services/Network";
+import NetworkButton from "./NetworkButton";
 
-function Navbar() {
+const Navbar = ({ chainId, name }: Network) => {
   return (
     <Flex
       p={2}
@@ -20,10 +22,11 @@ function Navbar() {
       </Box>
       <Spacer />
       <Box>
-        <AuthButtons />
+        <NetworkButton chainId={chainId} name={name} />
+        <AuthButtons hasWeb3={true} />
         <ThemeButton />
       </Box>
     </Flex>
   );
-}
+};
 export default Navbar;

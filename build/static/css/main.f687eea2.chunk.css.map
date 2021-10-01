@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/app.scss"],"names":[],"mappings":"AAGA,kBACE,YAAA,CACA,sBAAA,CACA,kBAAA,CACA,iBAAA,CACA,gBAAA","file":"main.f687eea2.chunk.css","sourcesContent":[".app {\r\n}\r\n\r\n.centeredChildren {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  text-align: center;\r\n  min-height: 100vh;\r\n}\r\n"]}
