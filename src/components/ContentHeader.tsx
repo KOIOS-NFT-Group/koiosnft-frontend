@@ -45,13 +45,31 @@ function ContentHeader() {
 
   const collectedNFTs = useBreakpointValue({ base: "", md: collectedAmount() });
 
+  const addressTrimming = (address: string) => {
+    return (
+      <Text fontWeight="bold" pl={2}>
+        {address.slice(0, 6)}...
+        {address.slice(address.length - 4, address.length)}
+      </Text>
+    );
+  };
+
+  const noTrimming = (address: string) => {
+    return (
+      <Text fontWeight="bold" pl={2}>
+        {address}
+      </Text>
+    );
+  };
+
+  const trimmedAddress = useBreakpointValue({
+    base: addressTrimming(user?.get("ethAddress")),
+    md: noTrimming(user?.get("ethAddress")),
+  });
+
   const messageConnection = () => {
     if (isAuthenticated) {
-      return (
-        <Text fontWeight="bold" pl={2}>
-          Address: {user?.get("ethAddress")}
-        </Text>
-      );
+      return <div>{trimmedAddress}</div>;
     } else {
       return (
         <Text fontWeight="bold" pl={2}>

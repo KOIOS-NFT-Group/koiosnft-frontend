@@ -33,7 +33,7 @@ function ContentBody() {
   const nftBoxes = () => {
     if (isAuthenticated) {
       return (
-        <SimpleGrid minChildWidth="120px" spacing="10px">
+        <SimpleGrid minChildWidth="250px" spacing="5px">
           {nfts.map((nft: NFT, i) => (
             <NftComponent key={i} {...nft} />
           ))}

@@ -1,7 +1,25 @@
-import { Box, Text } from "@chakra-ui/layout";
+import {
+  Badge,
+  Box,
+  Center,
+  Heading,
+  Spacer,
+  Text,
+  VStack,
+} from "@chakra-ui/layout";
 import { Metadata } from "./Metadata";
 import { NFT } from "./NFT";
-import { Image } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Image,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import { useColorModeValue } from "@chakra-ui/color-mode";
+import PlaceholderIMG from "../assets/placeholder.jpg";
+
+//const boxSize = useBreakpointValue({ base: "", md: boxLg() });
 
 const NftComponent = ({
   token_address,
@@ -18,25 +36,72 @@ const NftComponent = ({
     let meta: Metadata = JSON.parse(metadata);
 
     return (
-      <div>
-        <Box bg="tomato">
-          <Image src={meta.image} />
-          <Text>Name:{name}</Text>
-          <Text>Symbol: {symbol}</Text>
-          <Text>Token ID: {token_id}</Text>
-          <Text>{meta.name}</Text>
-        </Box>
-      </div>
+      <Box
+        bg="gray-100"
+        p={2}
+        minWidth="200px"
+        border="2px"
+        borderRadius="12px"
+        m={2}
+        borderColor="rgba(179,184,212,1)"
+      >
+        <VStack>
+          <Image
+            boxSize="225px"
+            borderRadius="12px"
+            objectFit="cover"
+            src={meta.image}
+          />
+          <Heading fontSize="md">{name}</Heading>
+          <VStack>
+            <Center>
+              <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
+                {symbol}
+              </Badge>
+              <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
+                # {token_id}
+              </Badge>
+            </Center>
+            <Text borderRadius="5px" px="5" m={2} fontWeight="bold">
+              {meta.name}
+            </Text>
+          </VStack>
+        </VStack>
+      </Box>
     );
   } else {
     return (
-      <div>
-        <Box bg="tomato">
-          <Text>Name:{name}</Text>
-          <Text>Symbol: {symbol}</Text>
-          <Text>Token ID: {token_id}</Text>
-        </Box>
-      </div>
+      <Box
+        p={2}
+        border="2px"
+        borderRadius="12px"
+        m={2}
+        borderColor="rgba(179,184,212,1)"
+      >
+        <VStack>
+          <Image
+            borderRadius="12px"
+            boxSize="225px"
+            objectFit="cover"
+            src={PlaceholderIMG}
+          />
+          <VStack>
+            <Heading fontSize="md">{name}</Heading>
+            <Center>
+              <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
+                {symbol}
+              </Badge>
+              <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
+                # {token_id}
+              </Badge>
+            </Center>
+            <Alert size="2xs" status="error" borderRadius="5px">
+              <AlertIcon />
+              No Metadata was found!
+            </Alert>
+          </VStack>
+        </VStack>
+      </Box>
     );
   }
 };

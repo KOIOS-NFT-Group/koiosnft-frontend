@@ -23,7 +23,7 @@ function Content() {
       <GridItem rowSpan={1}>
         <Divider border="2px" />
       </GridItem>
-      <GridItem rowSpan={5}>
+      <GridItem mt={-10} rowSpan={5} overflowX="hidden" overflowY="scroll">
         <ContentBody />
       </GridItem>
     </Grid>
