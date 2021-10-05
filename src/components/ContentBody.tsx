@@ -26,7 +26,9 @@ const ContentBody = ({ chainId, name }: Network) => {
               address: userAddr,
             });
             const nftArray = response.result!;
-
+            nftArray.sort((a, b) =>
+              a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+            );
             setNfts(nftArray);
           };
           fetchNFTs();
@@ -40,7 +42,9 @@ const ContentBody = ({ chainId, name }: Network) => {
               address: userAddr,
             });
             const nftArray = response.result!;
-
+            nftArray.sort((a, b) =>
+              a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+            );
             setNfts(nftArray);
           };
           fetchNFTs();
@@ -54,7 +58,9 @@ const ContentBody = ({ chainId, name }: Network) => {
               address: userAddr,
             });
             const nftArray = response.result!;
-
+            nftArray.sort((a, b) =>
+              a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+            );
             setNfts(nftArray);
           };
           fetchNFTs();

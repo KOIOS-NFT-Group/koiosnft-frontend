@@ -45,6 +45,18 @@ const NftComponent = ({
     }
   };
 
+  const ipfs = (): string => {
+    let meta: Metadata = JSON.parse(metadata!);
+    let ipfsLink: string = "https://ipfs.io/ipfs";
+    if (meta.image && meta.image.startsWith("ipfs")) {
+      ipfsLink = ipfsLink + meta.image.slice(6);
+      console.log("NFT: " + name + " ---- " + ipfsLink);
+      return ipfsLink;
+    } else {
+      return meta.image;
+    }
+  };
+
   let symbolTrimmed: string = trimSymbol();
   let tokenId: string = trimNumber();
 
@@ -64,12 +76,16 @@ const NftComponent = ({
       >
         <VStack>
           <Image
-            boxSize="225px"
+            ml={3}
+            boxSize="220px"
             borderRadius="12px"
-            objectFit="cover"
-            src={meta.image}
+            objectFit="contain"
+            alt={meta.name}
+            src={ipfs()}
           />
-          <Heading fontSize="md">{name}</Heading>
+          <Heading fontSize="md" align="center">
+            {name}
+          </Heading>
           <VStack>
             <Center>
               <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
@@ -110,7 +126,9 @@ const NftComponent = ({
             src={PlaceholderIMG}
           />
           <VStack>
-            <Heading fontSize="md">{name}</Heading>
+            <Heading fontSize="md" align="center">
+              {name}
+            </Heading>
             <Center>
               <Badge borderRadius="5px" px="5" m={2} colorScheme="teal">
                 {symbolTrimmed}
