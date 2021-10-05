@@ -1,9 +1,10 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Divider, Grid, GridItem } from "@chakra-ui/layout";
+import { Network } from "../services/Network";
 import ContentBody from "./ContentBody";
 import ContentHeader from "./ContentHeader";
 
-function Content() {
+const Content = ({ chainId, name }: Network) => {
   return (
     <Grid
       p={2}
@@ -18,16 +19,16 @@ function Content() {
       templateRows="repeat(7, 2fr)"
     >
       <GridItem rowSpan={1}>
-        <ContentHeader />
+        <ContentHeader chainId={chainId} name={name} />
       </GridItem>
       <GridItem rowSpan={1}>
         <Divider border="2px" />
       </GridItem>
       <GridItem mt={-10} rowSpan={5} overflowX="hidden" overflowY="scroll">
-        <ContentBody />
+        <ContentBody chainId={chainId} name={name} />
       </GridItem>
     </Grid>
   );
-}
+};
 
 export default Content;

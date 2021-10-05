@@ -5,7 +5,6 @@ let web3 = undefined;
 export async function initWeb3() {
   if (window.ethereum) {
     web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
     return true;
   } else if (window.web3) {
     web3 = new Web3(window.web3.currentProvider);
@@ -23,8 +22,9 @@ export async function getNetwork() {
 
 export function getNetworkName(chainID) {
   let networks = {
-    1: "Mainnet 🍺",
-    4: "Rinkeby ☕️",
+    1: "eth",
+    4: "rinkeby",
+    137: "polygon",
   };
   return networks[chainID];
 }

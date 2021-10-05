@@ -46,7 +46,7 @@ function App() {
           <Navbar chainId={chainId} name={getNetworkName(chainId)}></Navbar>
         </GridItem>
         <GridItem rowSpan={9}>
-          <Content />
+          <Content chainId={chainId} name={getNetworkName(chainId)} />
         </GridItem>
       </Grid>
     );

@@ -9,24 +9,56 @@ import {
 } from "@chakra-ui/react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useEffect, useState } from "react";
+import { Network } from "../services/Network";
 
-function ContentHeader() {
+const ContentHeader = ({ chainId, name }: Network) => {
   const { isAuthenticated, user } = useMoralis();
   const { account } = useMoralisWeb3Api();
   const [nfts, setNfts] = useState(0);
 
   useEffect(() => {
     if (isAuthenticated) {
-      const userAddr = user?.get("ethAddress");
-      const fetchNFTs = async () => {
-        const response = await account.getNFTs({
-          chain: "rinkeby",
-          address: userAddr,
-        });
-        const numberOf = response.result!.length;
-        setNfts(numberOf);
-      };
-      fetchNFTs();
+      switch (name) {
+        case "eth": {
+          const userAddr = user?.get("ethAddress");
+          const fetchNFTs = async () => {
+            const response = await account.getNFTs({
+              chain: "eth",
+              address: userAddr,
+            });
+            const numberOf = response.result!.length;
+            setNfts(numberOf);
+          };
+          fetchNFTs();
+          break;
+        }
+        case "rinkeby": {
+          const userAddr = user?.get("ethAddress");
+          const fetchNFTs = async () => {
+            const response = await account.getNFTs({
+              chain: "rinkeby",
+              address: userAddr,
+            });
+            const numberOf = response.result!.length;
+            setNfts(numberOf);
+          };
+          fetchNFTs();
+          break;
+        }
+        case "polygon": {
+          const userAddr = user?.get("ethAddress");
+          const fetchNFTs = async () => {
+            const response = await account.getNFTs({
+              chain: "polygon",
+              address: userAddr,
+            });
+            const numberOf = response.result!.length;
+            setNfts(numberOf);
+          };
+          fetchNFTs();
+          break;
+        }
+      }
     }
   });
 
@@ -69,7 +101,7 @@ function ContentHeader() {
         <Flex>
           <Box>
             <Heading p={4} pl={2} fontSize={{ base: "md", lg: "2xl" }}>
-              NFT Collection
+              {name}: NFT Collection
             </Heading>
             {messageConnection()}
           </Box>
@@ -81,5 +113,5 @@ function ContentHeader() {
   };
 
   return HeaderOptions();
-}
+};
 export default ContentHeader;
