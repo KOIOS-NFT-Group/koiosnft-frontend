@@ -50,7 +50,6 @@ const NftComponent = ({
     let ipfsLink: string = "https://ipfs.io/ipfs";
     if (meta.image && meta.image.startsWith("ipfs")) {
       ipfsLink = ipfsLink + meta.image.slice(6);
-      console.log("NFT: " + name + " ---- " + ipfsLink);
       return ipfsLink;
     } else {
       return meta.image;
@@ -66,12 +65,14 @@ const NftComponent = ({
     return (
       <Box
         overflow="scroll"
-        bg="gray-100"
         p={2}
         minWidth="200px"
+        maxWidth="250px"
+        minHeight="100%"
+        maxHeight="100%"
         border="2px"
         borderRadius="12px"
-        m={2}
+        ml={2}
         borderColor="rgba(179,184,212,1)"
       >
         <VStack>

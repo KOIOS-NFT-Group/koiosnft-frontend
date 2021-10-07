@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { NFT } from "./NFT";
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import NftComponent from "./NftComponent";
 import { NFTKey } from "./NFTKey";
 import { Network } from "../services/Network";
+import { Mapping } from "./Mapping";
+import Collection from "./Collection";
 
 const ContentBody = ({ chainId, name }: Network) => {
   const { isAuthenticated, user } = useMoralis();
@@ -13,7 +15,33 @@ const ContentBody = ({ chainId, name }: Network) => {
 
   let amountOfNfts: NFT[] = [];
 
-  const [nfts, setNfts] = useState(amountOfNfts);
+  let mappedItemsEmpty: Mapping[] = [];
+  const [mappedItems, setMappedItems] = useState(mappedItemsEmpty);
+
+  const mapIt = (nftArray: NFT[]): Map<string, NFT[]> => {
+    let mapping = new Map<string, NFT[]>();
+    for (let nft of nftArray) {
+      if (!mapping.has(nft.token_address)) {
+        let arrayOfItems: NFT[] = [];
+        for (let nft2 of nftArray) {
+          if (nft2.token_address == nft.token_address) {
+            arrayOfItems.push(nft2);
+          }
+        }
+        mapping.set(nft.name, arrayOfItems);
+      }
+    }
+    return mapping;
+  };
+
+  const createMappingArray = (mapping: Map<string, NFT[]>): Mapping[] => {
+    let mappingArray: Mapping[] = [];
+    for (let key of mapping.entries()) {
+      let map: Mapping = mapItems(key[0], key[1]);
+      mappingArray.push(map);
+    }
+    return mappingArray;
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -29,7 +57,10 @@ const ContentBody = ({ chainId, name }: Network) => {
             nftArray.sort((a, b) =>
               a.name > b.name ? 1 : b.name > a.name ? -1 : 0
             );
-            setNfts(nftArray);
+
+            let mapped: Map<string, NFT[]> = mapIt(nftArray);
+
+            setMappedItems(createMappingArray(mapped));
           };
           fetchNFTs();
           break;
@@ -45,7 +76,10 @@ const ContentBody = ({ chainId, name }: Network) => {
             nftArray.sort((a, b) =>
               a.name > b.name ? 1 : b.name > a.name ? -1 : 0
             );
-            setNfts(nftArray);
+
+            let mapped: Map<string, NFT[]> = mapIt(nftArray);
+
+            setMappedItems(createMappingArray(mapped));
           };
           fetchNFTs();
           break;
@@ -61,7 +95,9 @@ const ContentBody = ({ chainId, name }: Network) => {
             nftArray.sort((a, b) =>
               a.name > b.name ? 1 : b.name > a.name ? -1 : 0
             );
-            setNfts(nftArray);
+            let mapped: Map<string, NFT[]> = mapIt(nftArray);
+
+            setMappedItems(createMappingArray(mapped));
           };
           fetchNFTs();
           break;
@@ -70,19 +106,27 @@ const ContentBody = ({ chainId, name }: Network) => {
     }
   }, [name]);
 
+  const mapItems = (name: string, values: NFT[]): Mapping => {
+    let mapper: Mapping = {
+      collectionName: name,
+      collectionValues: values,
+    };
+    return mapper;
+  };
   const nftBoxes = () => {
     if (isAuthenticated) {
       return (
         <>
-          <SimpleGrid minChildWidth="250px" spacing="5px">
-            {nfts.map((nft: NFT, i) => (
-              <NftComponent key={i} {...nft} />
-            ))}
-          </SimpleGrid>
+          <VStack>
+            {mappedItems &&
+              mappedItems.map((map: Mapping, i) => (
+                <Collection key={i} {...map} />
+              ))}
+          </VStack>
         </>
       );
     } else {
-      return <Text>Connect wallet lol</Text>;
+      return <></>;
     }
   };
 
