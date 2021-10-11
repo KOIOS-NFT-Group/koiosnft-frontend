@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { NFT } from "./NFT";
-import { Box, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import NftComponent from "./NftComponent";
-import { NFTKey } from "./NFTKey";
+import { VStack } from "@chakra-ui/react";
 import { Network } from "../services/Network";
 import { Mapping } from "./Mapping";
 import Collection from "./Collection";
@@ -12,8 +10,6 @@ const ContentBody = ({ chainId, name }: Network) => {
   const { isAuthenticated, user } = useMoralis();
 
   const { account } = useMoralisWeb3Api();
-
-  let amountOfNfts: NFT[] = [];
 
   let mappedItemsEmpty: Mapping[] = [];
   const [mappedItems, setMappedItems] = useState(mappedItemsEmpty);
@@ -104,26 +100,25 @@ const ContentBody = ({ chainId, name }: Network) => {
         }
       }
     }
-  }, [name]);
+  }, [name, []]);
 
-  const mapItems = (name: string, values: NFT[]): Mapping => {
+  const mapItems = (key: string, values: NFT[]): Mapping => {
     let mapper: Mapping = {
-      collectionName: name,
+      collectionName: key,
       collectionValues: values,
     };
     return mapper;
   };
+
   const nftBoxes = () => {
     if (isAuthenticated) {
       return (
-        <>
-          <VStack>
-            {mappedItems &&
-              mappedItems.map((map: Mapping, i) => (
-                <Collection key={i} {...map} />
-              ))}
-          </VStack>
-        </>
+        <VStack>
+          {mappedItems &&
+            mappedItems.map((map: Mapping, i) => (
+              <Collection key={i} {...map} />
+            ))}
+        </VStack>
       );
     } else {
       return <></>;

@@ -3,7 +3,11 @@ import { Network } from "../services/Network";
 
 const NetworkButton = ({ chainId, name }: Network) => {
   const capitalize = (): string => {
-    return name.charAt(0).toUpperCase() + name.slice(1);
+    if (name) {
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    } else {
+      return "Unsupported!";
+    }
   };
 
   let niceName: string = capitalize();

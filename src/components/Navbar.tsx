@@ -1,32 +1,93 @@
-import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  useBreakpointValue,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import AuthButtons from "./AuthenticationButton";
 import ThemeButton from "./ThemeButton";
-import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Network } from "../services/Network";
 import NetworkButton from "./NetworkButton";
+import { NavLink } from "react-router-dom";
+import "./Navbar.css";
 
-const Navbar = ({ chainId, name }: Network) => {
+const showTitle = ({ chainId, name }: Network) => {
   return (
-    <Flex
+    <Grid
       p={2}
       border="2px"
       borderRadius="12px"
       m={2}
-      borderColor={useColorModeValue(
-        "rgba(179,184,212,1)",
-        "rgba(179,184,212,.2)"
-      )}
+      borderColor="rgba(179,184,212,.2)"
+      templateColumns="repeat(3, 1fr)"
     >
-      <Box p="2">
-        <Heading fontSize={{ base: "md", lg: "2xl" }}>NFT Dashboard</Heading>
-      </Box>
-      <Spacer />
-      <Box>
+      <GridItem colSpan={1}>
+        <Flex>
+          <Box p="2">
+            <NavLink to="/dashboard">
+              <Button fontSize={{ base: "md", lg: "2xl" }}>Dashboard</Button>
+            </NavLink>
+          </Box>
+          <Box p="2">
+            <NavLink to="/mint">
+              <Button fontSize={{ base: "md", lg: "2xl" }}>Mint</Button>
+            </NavLink>
+          </Box>
+        </Flex>
+      </GridItem>
+      <GridItem colSpan={1}>
+        <Center>
+          <Box p="2">
+            <Heading fontSize={{ base: "md", lg: "2xl" }}>
+              NFT Dashboard
+            </Heading>
+          </Box>
+        </Center>
+      </GridItem>
+      <GridItem colSpan={1}>
+        <Box float="right">
+          <NetworkButton chainId={chainId} name={name} />
+          <AuthButtons hasWeb3={true} />
+          <ThemeButton />
+        </Box>
+      </GridItem>
+    </Grid>
+  );
+};
+
+const showMobile = ({ chainId, name }: Network) => {
+  return (
+    <>
+      <SimpleGrid minChildWidth="150px">
+        <NavLink to="/dashboard">
+          <Button m={2} width="90%">
+            Dashboard
+          </Button>
+        </NavLink>
+        <NavLink to="/mint">
+          <Button m={2} width="90%">
+            Mint
+          </Button>
+        </NavLink>
         <NetworkButton chainId={chainId} name={name} />
         <AuthButtons hasWeb3={true} />
         <ThemeButton />
-      </Box>
-    </Flex>
+      </SimpleGrid>
+    </>
   );
+};
+
+const Navbar = ({ chainId, name }: Network) => {
+  const title = useBreakpointValue({
+    base: showMobile({ chainId, name }),
+    md: showTitle({ chainId, name }),
+  });
+
+  return <>{title}</>;
 };
 export default Navbar;

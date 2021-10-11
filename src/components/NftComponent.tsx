@@ -1,18 +1,8 @@
-import {
-  Badge,
-  Box,
-  Center,
-  Heading,
-  Spacer,
-  Text,
-  VStack,
-} from "@chakra-ui/layout";
+import { Badge, Box, Center, Heading, Text, VStack } from "@chakra-ui/layout";
 import { Metadata } from "./Metadata";
 import { NFT } from "./NFT";
 import { Alert, AlertIcon, Image } from "@chakra-ui/react";
 import PlaceholderIMG from "../assets/placeholder.jpg";
-
-//const boxSize = useBreakpointValue({ base: "", md: boxLg() });
 
 const NftComponent = ({
   token_address,
