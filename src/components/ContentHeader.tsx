@@ -11,14 +11,14 @@ import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useEffect, useState } from "react";
 import { Network } from "../services/Network";
 
-const ContentHeader = ({ chainId, name }: Network) => {
+const ContentHeader = ({ chainId, networkName }: Network) => {
   const { isAuthenticated, user } = useMoralis();
   const { account } = useMoralisWeb3Api();
   const [nfts, setNfts] = useState(0);
 
   useEffect(() => {
     if (isAuthenticated) {
-      switch (name) {
+      switch (networkName) {
         case "eth": {
           const userAddr = user?.get("ethAddress");
           const fetchNFTs = async () => {
@@ -101,7 +101,7 @@ const ContentHeader = ({ chainId, name }: Network) => {
         <Flex>
           <Box>
             <Heading p={4} pl={2} fontSize={{ base: "md", lg: "2xl" }}>
-              {name}: NFT Collection
+              {networkName}: NFT Collection
             </Heading>
             {messageConnection()}
           </Box>

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Center,
-  Heading,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/layout";
+import { Box, Heading, SimpleGrid, VStack } from "@chakra-ui/layout";
 import { Divider } from "@chakra-ui/react";
 import { Mapping } from "./Mapping";
 import { NFT } from "./NFT";

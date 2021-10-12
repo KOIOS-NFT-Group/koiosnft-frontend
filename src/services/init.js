@@ -25,6 +25,7 @@ export function getNetworkName(chainID) {
     1: "eth",
     4: "rinkeby",
     137: "polygon",
+    42069: "unsupported",
   };
   return networks[chainID];
 }

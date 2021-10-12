@@ -16,7 +16,7 @@ import NetworkButton from "./NetworkButton";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
-const showTitle = ({ chainId, name }: Network) => {
+const showTitle = ({ chainId, networkName }: Network) => {
   return (
     <Grid
       p={2}
@@ -51,8 +51,8 @@ const showTitle = ({ chainId, name }: Network) => {
       </GridItem>
       <GridItem colSpan={1}>
         <Box float="right">
-          <NetworkButton chainId={chainId} name={name} />
-          <AuthButtons hasWeb3={true} />
+          <NetworkButton chainId={chainId} networkName={networkName} />
+          <AuthButtons />
           <ThemeButton />
         </Box>
       </GridItem>
@@ -60,7 +60,7 @@ const showTitle = ({ chainId, name }: Network) => {
   );
 };
 
-const showMobile = ({ chainId, name }: Network) => {
+const showMobile = ({ chainId, networkName }: Network) => {
   return (
     <>
       <SimpleGrid minChildWidth="150px">
@@ -74,18 +74,18 @@ const showMobile = ({ chainId, name }: Network) => {
             Mint
           </Button>
         </NavLink>
-        <NetworkButton chainId={chainId} name={name} />
-        <AuthButtons hasWeb3={true} />
+        <NetworkButton chainId={chainId} networkName={networkName} />
+        <AuthButtons />
         <ThemeButton />
       </SimpleGrid>
     </>
   );
 };
 
-const Navbar = ({ chainId, name }: Network) => {
+const Navbar = ({ chainId, networkName }: Network) => {
   const title = useBreakpointValue({
-    base: showMobile({ chainId, name }),
-    md: showTitle({ chainId, name }),
+    base: showMobile({ chainId, networkName }),
+    md: showTitle({ chainId, networkName }),
   });
 
   return <>{title}</>;

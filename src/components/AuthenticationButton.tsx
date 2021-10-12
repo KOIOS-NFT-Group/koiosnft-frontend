@@ -2,11 +2,7 @@ import { Button, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import checkWeb3 from "../services/NetworkTracker";
 
-interface Web3Enabled {
-  hasWeb3: boolean;
-}
-
-const AuthButtons = ({ hasWeb3 }: Web3Enabled) => {
+const AuthButtons = () => {
   const { authenticate, isAuthenticated, isAuthenticating, logout } =
     useMoralis();
 
@@ -33,48 +29,32 @@ const AuthButtons = ({ hasWeb3 }: Web3Enabled) => {
 
   const AuthState = () => {
     checkWeb3();
-    if (!hasWeb3) {
+    if (isAuthenticated) {
       return (
         <Button
           m={2}
           fontSize={{ base: "sm", md: "sm", lg: "md" }}
+          onClick={() => {
+            logoutWallet();
+          }}
+        >
+          {valuesConnected}
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          m={2}
+          isLoading={isAuthenticating}
           onClick={() => {
             authenticate({
               signingMessage: "Sign message to confirm ownership of address",
             });
           }}
         >
-          Press to unlock your Metamask 👛
+          {values}
         </Button>
       );
-    } else {
-      if (isAuthenticated) {
-        return (
-          <Button
-            m={2}
-            fontSize={{ base: "sm", md: "sm", lg: "md" }}
-            onClick={() => {
-              logoutWallet();
-            }}
-          >
-            {valuesConnected}
-          </Button>
-        );
-      } else {
-        return (
-          <Button
-            m={2}
-            isLoading={isAuthenticating}
-            onClick={() => {
-              authenticate({
-                signingMessage: "Sign message to confirm ownership of address",
-              });
-            }}
-          >
-            {values}
-          </Button>
-        );
-      }
     }
   };
 

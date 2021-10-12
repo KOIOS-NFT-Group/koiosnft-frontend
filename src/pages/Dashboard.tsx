@@ -30,10 +30,10 @@ function Dashboard() {
 
     async function getTheChainId() {
       let result = await getNetwork();
-      if (result) {
+      if (result === 1 || result === 4 || result === 137) {
         setChainId(result);
       } else {
-        console.log("lol no chainId detection");
+        setChainId(42069);
       }
     }
     getTheChainId();
@@ -43,10 +43,13 @@ function Dashboard() {
     return (
       <Grid templateRows="repeat(10,1fr)" h="100vh">
         <GridItem rowSpan={1}>
-          <Navbar chainId={chainId} name={getNetworkName(chainId)}></Navbar>
+          <Navbar
+            chainId={chainId}
+            networkName={getNetworkName(chainId)}
+          ></Navbar>
         </GridItem>
         <GridItem rowSpan={9}>
-          <Content chainId={chainId} name={getNetworkName(chainId)} />
+          <Content chainId={chainId} networkName={getNetworkName(chainId)} />
         </GridItem>
       </Grid>
     );

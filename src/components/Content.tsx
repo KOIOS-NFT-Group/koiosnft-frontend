@@ -4,7 +4,7 @@ import { Network } from "../services/Network";
 import ContentBody from "./ContentBody";
 import ContentHeader from "./ContentHeader";
 
-const Content = ({ chainId, name }: Network) => {
+const Content = ({ chainId, networkName }: Network) => {
   return (
     <Grid
       p={2}
@@ -19,13 +19,13 @@ const Content = ({ chainId, name }: Network) => {
       templateRows="repeat(7, 2fr)"
     >
       <GridItem rowSpan={1}>
-        <ContentHeader chainId={chainId} name={name} />
+        <ContentHeader chainId={chainId} networkName={networkName} />
       </GridItem>
       <GridItem rowSpan={1}>
         <Divider border="2px" />
       </GridItem>
       <GridItem mt={-10} rowSpan={5} overflowX="hidden" overflowY="scroll">
-        <ContentBody chainId={chainId} name={name} />
+        <ContentBody chainId={chainId} networkName={networkName} />
       </GridItem>
     </Grid>
   );

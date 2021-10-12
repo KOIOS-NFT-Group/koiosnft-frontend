@@ -1,10 +1,9 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { Center, Grid, GridItem, Heading, VStack } from "@chakra-ui/layout";
-import ABI from "../services/ContractABI";
 import { Network } from "../services/Network";
 import MintBody from "./MintBody";
 
-const MintComponent = ({ chainId, name }: Network) => {
+const MintComponent = ({ chainId, networkName }: Network) => {
   return (
     <Grid
       p={2}
@@ -24,7 +23,7 @@ const MintComponent = ({ chainId, name }: Network) => {
             <Heading>Mint your NFT</Heading>
           </GridItem>
           <GridItem mt={-10} rowSpan={5} overflowX="hidden" overflowY="scroll">
-            <MintBody chainId={chainId} name={name} />
+            <MintBody chainId={chainId} networkName={networkName} />
           </GridItem>
         </VStack>
       </Center>

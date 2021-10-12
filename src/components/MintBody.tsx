@@ -2,23 +2,29 @@ import { Network } from "../services/Network";
 import ABI from "../services/ContractABI";
 import { Button } from "@chakra-ui/button";
 import { Moralis } from "moralis";
-import Web3 from "web3";
+import { Transfer } from "./Receipt";
 import { AbiItem } from "web3-utils";
 import {
-  Box,
   Center,
   Heading,
   Text,
   VStack,
   Image,
   useBreakpointValue,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import confirmationHooray from "../assets/hooray.gif";
 
-const MintBody = ({ chainId, name }: Network) => {
+const MintBody = ({ chainId, networkName }: Network) => {
   const [txHash, setTxHash] = useState("");
   const [confirmed, setConfirmation] = useState(false);
+  const [amount, setAmount] = useState(1);
+  const [tokenId, setTokenId] = useState(0);
 
   const CONTRACT_ADDRESS = "0xbc7dced78438d564057a0f7fdb216c6194411603";
   let web3 = undefined;
@@ -34,17 +40,33 @@ const MintBody = ({ chainId, name }: Network) => {
     contract.defaultChain = "rinkeby";
     account = accounts[0];
 
+    const amountToPay = amount * 0.001 * 1000000000000000000;
+
     contract.methods
-      .mint(1)
+      .mint(amount)
       .send({
         from: account,
-        value: Web3.utils.toWei("0.001", "ether"),
+        value: amountToPay,
       })
       .on("transactionHash", function (hash: string) {
         setTxHash(hash);
       })
-      .on("confirmation", function () {
-        setConfirmation(true);
+      .on("confirmation", function (confirmationNumber: number, receipt: any) {
+        if (confirmationNumber === 0) {
+          setConfirmation(true);
+          switch (amount >= 2) {
+            case true:
+              for (let token of receipt.events.Transfer) {
+                console.log("Token ID: " + token.returnValues.tokenId);
+              }
+              break;
+            case false:
+              let transfere: Transfer = receipt.events.Transfer;
+              console.log("Token ID: " + transfere.returnValues.tokenId);
+              setTokenId(transfere.returnValues.tokenId as unknown as number);
+              break;
+          }
+        }
       });
   };
 
@@ -62,13 +84,13 @@ const MintBody = ({ chainId, name }: Network) => {
   });
 
   const renderHash = () => {
-    if (txHash != "") {
+    if (txHash !== "") {
       const url = "https://rinkeby.etherscan.io/tx/" + txHash;
       return (
         <a
           href={url}
           target="_blank"
-          rel="noopener"
+          rel="noreferrer"
           title="Click to view transaction!"
         >
           {values}
@@ -84,7 +106,9 @@ const MintBody = ({ chainId, name }: Network) => {
       return (
         <VStack p={5}>
           <Center>
-            <Text mb={2}>🎉 Successfully minted your NFT! 🎉</Text>
+            <Text mb={2}>
+              🎉 Successfully minted your NFT! ID: {tokenId} 🎉
+            </Text>
           </Center>
           <Image
             borderRadius="md"
@@ -101,9 +125,28 @@ const MintBody = ({ chainId, name }: Network) => {
     }
   };
 
-  if (name === "rinkeby") {
+  const handleChange = (value: number) => setAmount(value);
+
+  if (networkName === "rinkeby") {
     return (
       <VStack>
+        <NumberInput
+          mb={2}
+          size="md"
+          defaultValue={1}
+          min={1}
+          max={5}
+          onChange={(valueAsNumber) =>
+            handleChange(valueAsNumber as unknown as number)
+          }
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+        <Text fontWeight="bold">Total: {amount * 0.001} ETH</Text>
         <Button m={5} onClick={() => mintToken()}>
           Mint!
         </Button>

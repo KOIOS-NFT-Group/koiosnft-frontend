@@ -42,10 +42,16 @@ function Mint() {
     return (
       <Grid templateRows="repeat(10,1fr)" h="100vh">
         <GridItem rowSpan={1}>
-          <Navbar chainId={chainId} name={getNetworkName(chainId)}></Navbar>
+          <Navbar
+            chainId={chainId}
+            networkName={getNetworkName(chainId)}
+          ></Navbar>
         </GridItem>
         <GridItem rowSpan={9}>
-          <MintComponent chainId={chainId} name={getNetworkName(chainId)} />
+          <MintComponent
+            chainId={chainId}
+            networkName={getNetworkName(chainId)}
+          />
         </GridItem>
       </Grid>
     );

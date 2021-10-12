@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { NFT } from "./NFT";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Text } from "@chakra-ui/react";
 import { Network } from "../services/Network";
 import { Mapping } from "./Mapping";
 import Collection from "./Collection";
 
-const ContentBody = ({ chainId, name }: Network) => {
+const ContentBody = ({ chainId, networkName }: Network) => {
   const { isAuthenticated, user } = useMoralis();
 
   const { account } = useMoralisWeb3Api();
@@ -20,7 +20,7 @@ const ContentBody = ({ chainId, name }: Network) => {
       if (!mapping.has(nft.token_address)) {
         let arrayOfItems: NFT[] = [];
         for (let nft2 of nftArray) {
-          if (nft2.token_address == nft.token_address) {
+          if (nft2.token_address === nft.token_address) {
             arrayOfItems.push(nft2);
           }
         }
@@ -41,7 +41,7 @@ const ContentBody = ({ chainId, name }: Network) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      switch (name) {
+      switch (networkName) {
         case "eth": {
           const userAddr = user?.get("ethAddress");
           const fetchNFTs = async () => {
@@ -64,9 +64,10 @@ const ContentBody = ({ chainId, name }: Network) => {
         case "rinkeby": {
           const userAddr = user?.get("ethAddress");
           const fetchNFTs = async () => {
-            const response = await account.getNFTs({
+            const response = await account.getNFTsForContract({
               chain: "rinkeby",
               address: userAddr,
+              token_address: "0xbc7dced78438d564057a0f7fdb216c6194411603",
             });
             const nftArray = response.result!;
             nftArray.sort((a, b) =>
@@ -100,7 +101,7 @@ const ContentBody = ({ chainId, name }: Network) => {
         }
       }
     }
-  }, [name, []]);
+  });
 
   const mapItems = (key: string, values: NFT[]): Mapping => {
     let mapper: Mapping = {
@@ -112,14 +113,18 @@ const ContentBody = ({ chainId, name }: Network) => {
 
   const nftBoxes = () => {
     if (isAuthenticated) {
-      return (
-        <VStack>
-          {mappedItems &&
-            mappedItems.map((map: Mapping, i) => (
-              <Collection key={i} {...map} />
-            ))}
-        </VStack>
-      );
+      if (networkName !== "unsupported") {
+        return (
+          <VStack>
+            {mappedItems &&
+              mappedItems.map((map: Mapping, i) => (
+                <Collection key={i} {...map} />
+              ))}
+          </VStack>
+        );
+      } else {
+        return <Text>Wrong network!</Text>;
+      }
     } else {
       return <></>;
     }

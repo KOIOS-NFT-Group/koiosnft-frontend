@@ -1,10 +1,10 @@
 import { Button } from "@chakra-ui/react";
 import { Network } from "../services/Network";
 
-const NetworkButton = ({ chainId, name }: Network) => {
+const NetworkButton = ({ chainId, networkName }: Network) => {
   const capitalize = (): string => {
-    if (name) {
-      return name.charAt(0).toUpperCase() + name.slice(1);
+    if (networkName) {
+      return networkName.charAt(0).toUpperCase() + networkName.slice(1);
     } else {
       return "Unsupported!";
     }
