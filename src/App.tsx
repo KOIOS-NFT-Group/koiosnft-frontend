@@ -7,7 +7,6 @@ const App = () => {
     <BrowserRouter>
       <div>
         <Route exact path="/" component={Dashboard} />
-        <Route path="/dashboard" component={Dashboard} />
         <Route path="/mint" component={Mint} />
       </div>
     </BrowserRouter>
