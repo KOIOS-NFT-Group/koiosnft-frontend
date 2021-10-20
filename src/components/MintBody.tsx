@@ -26,7 +26,7 @@ const MintBody = ({ chainId, networkName }: Network) => {
   const [amount, setAmount] = useState(1);
   const [tokenId, setTokenId] = useState(0);
 
-  const CONTRACT_ADDRESS = "0xbc7dced78438d564057a0f7fdb216c6194411603";
+  const CONTRACT_ADDRESS = "0xc5d26Ed816da61e5d633BcEa3Fc0055BD81A96A7";
   let web3 = undefined;
   let account = undefined;
   let contract = undefined;
@@ -43,7 +43,7 @@ const MintBody = ({ chainId, networkName }: Network) => {
     const amountToPay = amount * 0.001 * 1000000000000000000;
 
     contract.methods
-      .mint(amount)
+      .mint()
       .send({
         from: account,
         value: amountToPay,

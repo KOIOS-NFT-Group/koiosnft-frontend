@@ -87,6 +87,25 @@ const ABI = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tokenID",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "minterAddress",
+        type: "address",
+      },
+    ],
+    name: "tokenMinted",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "PRICE",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -94,10 +113,13 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "TOTAL_NUMBER_OF_NFTS",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
+    inputs: [
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+      { internalType: "string", name: "_tokenURI", type: "string" },
+    ],
+    name: "_setTokenURI",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -132,6 +154,23 @@ const ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getAllTokens",
+    outputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "id", type: "uint256" },
+          { internalType: "string", name: "uri", type: "string" },
+        ],
+        internalType: "struct Kekw.KekwToken[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "getApproved",
     outputs: [{ internalType: "address", name: "", type: "address" }],
@@ -156,7 +195,7 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "num", type: "uint256" }],
+    inputs: [],
     name: "mint",
     outputs: [],
     stateMutability: "payable",
