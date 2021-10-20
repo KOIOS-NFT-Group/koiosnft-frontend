@@ -67,7 +67,7 @@ const ContentBody = ({ chainId, networkName }: Network) => {
             const response = await account.getNFTsForContract({
               chain: "rinkeby",
               address: userAddr,
-              token_address: "0xbc7dced78438d564057a0f7fdb216c6194411603",
+              token_address: "0x3EeFE5af0459c73a77ae20a6D2642d4AbF936FB5",
             });
             const nftArray = response.result!;
             nftArray.sort((a, b) =>

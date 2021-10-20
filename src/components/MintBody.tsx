@@ -11,22 +11,17 @@ import {
   VStack,
   Image,
   useBreakpointValue,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import confirmationHooray from "../assets/hooray.gif";
+import { ipfsUpload } from "../services/IpfsStuff";
 
 const MintBody = ({ chainId, networkName }: Network) => {
   const [txHash, setTxHash] = useState("");
   const [confirmed, setConfirmation] = useState(false);
-  const [amount, setAmount] = useState(1);
   const [tokenId, setTokenId] = useState(0);
 
-  const CONTRACT_ADDRESS = "0xbc7dced78438d564057a0f7fdb216c6194411603";
+  const CONTRACT_ADDRESS = "0x3EeFE5af0459c73a77ae20a6D2642d4AbF936FB5";
   let web3 = undefined;
   let account = undefined;
   let contract = undefined;
@@ -40,10 +35,17 @@ const MintBody = ({ chainId, networkName }: Network) => {
     contract.defaultChain = "rinkeby";
     account = accounts[0];
 
-    const amountToPay = amount * 0.001 * 1000000000000000000;
+    const amountToPay = 0.001 * 1000000000000000000;
 
+    const generate = () => {
+      console.log("Art is generating...");
+    };
+    const amount: number = await contract.methods.totalSupply().call();
+    console.log(+amount + 1);
+    const tokenHash = await ipfsUpload(+amount + 1);
+    console.log("Token Hash is: " + tokenHash);
     contract.methods
-      .mint(amount)
+      .mint(tokenHash)
       .send({
         from: account,
         value: amountToPay,
@@ -54,18 +56,11 @@ const MintBody = ({ chainId, networkName }: Network) => {
       .on("confirmation", function (confirmationNumber: number, receipt: any) {
         if (confirmationNumber === 0) {
           setConfirmation(true);
-          switch (amount >= 2) {
-            case true:
-              for (let token of receipt.events.Transfer) {
-                console.log("Token ID: " + token.returnValues.tokenId);
-              }
-              break;
-            case false:
-              let transfere: Transfer = receipt.events.Transfer;
-              console.log("Token ID: " + transfere.returnValues.tokenId);
-              setTokenId(transfere.returnValues.tokenId as unknown as number);
-              break;
-          }
+
+          let transfere: Transfer = receipt.events.Transfer;
+          console.log("Token ID: " + transfere.returnValues.tokenId);
+          generate();
+          setTokenId(transfere.returnValues.tokenId as unknown as number);
         }
       });
   };
@@ -125,28 +120,10 @@ const MintBody = ({ chainId, networkName }: Network) => {
     }
   };
 
-  const handleChange = (value: number) => setAmount(value);
-
   if (networkName === "rinkeby") {
     return (
       <VStack>
-        <NumberInput
-          mb={2}
-          size="md"
-          defaultValue={1}
-          min={1}
-          max={5}
-          onChange={(valueAsNumber) =>
-            handleChange(valueAsNumber as unknown as number)
-          }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-        <Text fontWeight="bold">Total: {amount * 0.001} ETH</Text>
+        <Text fontWeight="bold">Total: 0.001 ETH</Text>
         <Button m={5} onClick={() => mintToken()}>
           Mint!
         </Button>
