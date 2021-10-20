@@ -6,6 +6,9 @@ import { initWeb3, getNetwork, getNetworkName } from "../services/init";
 import { useState, useEffect } from "react";
 import Moralis from "moralis";
 import { Button } from "@chakra-ui/button";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { update } from "../features/network/network-slice";
+import NetworkState from "../features/network/NetworkState";
 
 function Dashboard() {
   const [re, setRe] = useState(false);

@@ -15,7 +15,7 @@ export async function Mint() {
   contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
   account = accounts[0];
 
-  contract.methods.mint(1).send({
+  contract.methods.mint().send({
     from: account,
     value: Web3.utils.toWei("0.001", "ether"),
   });

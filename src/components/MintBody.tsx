@@ -46,7 +46,7 @@ const MintBody = ({ chainId, networkName }: Network) => {
       .mint(amount)
       .send({
         from: account,
-        value: amountToPay,
+        value: web3.utils.fromWei("0.001", "ether"),
       })
       .on("transactionHash", function (hash: string) {
         setTxHash(hash);

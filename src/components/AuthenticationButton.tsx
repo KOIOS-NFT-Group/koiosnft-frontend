@@ -1,10 +1,16 @@
 import { Button, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import checkWeb3 from "../services/NetworkTracker";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { update, toggleLoading } from "../features/network/network-slice";
+import NetworkState from "../features/network/NetworkState";
 
 const AuthButtons = () => {
-  const { authenticate, isAuthenticated, isAuthenticating, logout } =
+  const { authenticate, isAuthenticated, isAuthenticating, logout, user } =
     useMoralis();
+
+  const userAddress = useAppSelector((state) => state.network.account);
+  const dispatch = useAppDispatch();
 
   const values = useBreakpointValue({
     base: "Connect 👛",
@@ -12,7 +18,7 @@ const AuthButtons = () => {
   });
 
   const valuesConnected = useBreakpointValue({
-    base: "Connected ✅",
+    base: userAddress + " ✅",
   });
 
   const toast = useToast();
@@ -25,6 +31,21 @@ const AuthButtons = () => {
       duration: 2000,
       isClosable: true,
     });
+  };
+
+  const authenticateWallet = () => {
+    dispatch(toggleLoading());
+    authenticate({
+      signingMessage: "Sign message to confirm ownership of address",
+    });
+    if (isAuthenticated) {
+      const userAddress = user?.get("ethAddress");
+
+      // let newState: NetworkState = {
+      //   loading:
+      //   account: userAddress
+      // };
+    }
   };
 
   const AuthState = () => {
@@ -47,9 +68,7 @@ const AuthButtons = () => {
           m={2}
           isLoading={isAuthenticating}
           onClick={() => {
-            authenticate({
-              signingMessage: "Sign message to confirm ownership of address",
-            });
+            authenticateWallet();
           }}
         >
           {values}
