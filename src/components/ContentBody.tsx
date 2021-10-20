@@ -55,7 +55,6 @@ const ContentBody = ({ chainId, networkName }: Network) => {
             );
 
             let mapped: Map<string, NFT[]> = mapIt(nftArray);
-
             setMappedItems(createMappingArray(mapped));
           };
           fetchNFTs();
@@ -67,7 +66,7 @@ const ContentBody = ({ chainId, networkName }: Network) => {
             const response = await account.getNFTsForContract({
               chain: "rinkeby",
               address: userAddr,
-              token_address: "0xbc7dced78438d564057a0f7fdb216c6194411603",
+              token_address: "0xc5d26Ed816da61e5d633BcEa3Fc0055BD81A96A7",
             });
             const nftArray = response.result!;
             nftArray.sort((a, b) =>
@@ -75,7 +74,6 @@ const ContentBody = ({ chainId, networkName }: Network) => {
             );
 
             let mapped: Map<string, NFT[]> = mapIt(nftArray);
-
             setMappedItems(createMappingArray(mapped));
           };
           fetchNFTs();
