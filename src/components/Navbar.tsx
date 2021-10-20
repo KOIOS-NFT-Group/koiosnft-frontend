@@ -29,7 +29,7 @@ const showTitle = ({ chainId, networkName }: Network) => {
       <GridItem colSpan={1}>
         <Flex>
           <Box p="2">
-            <NavLink to="/dashboard">
+            <NavLink to="/">
               <Button fontSize={{ base: "md", lg: "2xl" }}>Dashboard</Button>
             </NavLink>
           </Box>
