@@ -6,7 +6,7 @@ const initialState: NetworkState = {
   loading: false,
   chainId: 1,
   network: "eth",
-  web3: null,
+  web3: false,
   account: "",
 };
 
@@ -19,13 +19,19 @@ const networkSlice = createSlice({
       state.network = action.payload.network;
       state.chainId = action.payload.chainId;
       state.account = action.payload.account;
-      state.web3 = action.payload.web3;
     },
     toggleLoading(state) {
       state.loading = !state.loading;
     },
+    setWeb3(state, action: PayloadAction<boolean>) {
+      state.web3 = action.payload;
+    },
+    updateAddress(state, action: PayloadAction<string>) {
+      state.account = action.payload;
+    },
   },
 });
 
-export const { update, toggleLoading } = networkSlice.actions;
+export const { update, toggleLoading, setWeb3, updateAddress } =
+  networkSlice.actions;
 export default networkSlice.reducer;
