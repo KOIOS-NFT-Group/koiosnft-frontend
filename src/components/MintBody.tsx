@@ -11,11 +11,6 @@ import {
   VStack,
   Image,
   useBreakpointValue,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import confirmationHooray from "../assets/hooray.gif";
@@ -23,7 +18,6 @@ import confirmationHooray from "../assets/hooray.gif";
 const MintBody = ({ chainId, networkName }: Network) => {
   const [txHash, setTxHash] = useState("");
   const [confirmed, setConfirmation] = useState(false);
-  const [amount, setAmount] = useState(1);
   const [tokenId, setTokenId] = useState(0);
 
   const CONTRACT_ADDRESS = "0xc5d26Ed816da61e5d633BcEa3Fc0055BD81A96A7";
@@ -40,7 +34,7 @@ const MintBody = ({ chainId, networkName }: Network) => {
     contract.defaultChain = "rinkeby";
     account = accounts[0];
 
-    const amountToPay = amount * 0.001 * 1000000000000000000;
+    const amountToPay = 0.001 * 1000000000000000000;
 
     contract.methods
       .mint()
@@ -54,18 +48,8 @@ const MintBody = ({ chainId, networkName }: Network) => {
       .on("confirmation", function (confirmationNumber: number, receipt: any) {
         if (confirmationNumber === 0) {
           setConfirmation(true);
-          switch (amount >= 2) {
-            case true:
-              for (let token of receipt.events.Transfer) {
-                console.log("Token ID: " + token.returnValues.tokenId);
-              }
-              break;
-            case false:
-              let transfere: Transfer = receipt.events.Transfer;
-              console.log("Token ID: " + transfere.returnValues.tokenId);
-              setTokenId(transfere.returnValues.tokenId as unknown as number);
-              break;
-          }
+          let transfere: Transfer = receipt.events.Transfer;
+          console.log("Token ID: " + transfere.returnValues.tokenId);
         }
       });
   };
@@ -125,28 +109,10 @@ const MintBody = ({ chainId, networkName }: Network) => {
     }
   };
 
-  const handleChange = (value: number) => setAmount(value);
-
   if (networkName === "rinkeby") {
     return (
       <VStack>
-        <NumberInput
-          mb={2}
-          size="md"
-          defaultValue={1}
-          min={1}
-          max={5}
-          onChange={(valueAsNumber) =>
-            handleChange(valueAsNumber as unknown as number)
-          }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-        <Text fontWeight="bold">Total: {amount * 0.001} ETH</Text>
+        <Text fontWeight="bold">Total: 0.001 ETH</Text>
         <Button m={5} onClick={() => mintToken()}>
           Mint!
         </Button>
