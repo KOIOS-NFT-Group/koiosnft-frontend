@@ -19,13 +19,13 @@ function Mint() {
   });
 
   useEffect(() => {
-    async function hasMetamask() {
-      let result = await initWeb3();
-      if (result) {
-        setWeb3(true);
-      } else setWeb3(false);
-    }
-    hasMetamask();
+    // async function hasMetamask() {
+    //   let result = await initWeb3();
+    //   if (result) {
+    //     setWeb3(true);
+    //   } else setWeb3(false);
+    // }
+    // hasMetamask();
 
     async function getTheChainId() {
       let result = await getNetwork();

@@ -2,6 +2,6 @@ export default interface NetworkState {
   loading: boolean;
   chainId: number;
   network: string;
-  web3?: boolean;
+  web3: any;
   account: string;
 }

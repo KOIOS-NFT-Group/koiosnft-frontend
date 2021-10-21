@@ -3,6 +3,10 @@ import networkReducter from "./network/network-slice";
 
 export const store = configureStore({
   reducer: { network: networkReducter },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

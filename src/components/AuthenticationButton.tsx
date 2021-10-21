@@ -1,14 +1,20 @@
 import { Button, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
-import checkWeb3 from "../services/NetworkTracker";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { updateAddress } from "../features/network/network-slice";
 
 const AuthButtons = () => {
-  const { authenticate, isAuthenticated, isAuthenticating, logout, user } =
-    useMoralis();
+  const {
+    authenticate,
+    isAuthenticated,
+    isAuthenticating,
+    logout,
+    user,
+    Moralis,
+  } = useMoralis();
 
   const userAddress = useAppSelector((state) => state.network.account);
+  const web3 = useAppSelector((state) => state.network.web3);
   const dispatch = useAppDispatch();
 
   const values = useBreakpointValue({
@@ -39,8 +45,48 @@ const AuthButtons = () => {
       isClosable: true,
     });
   };
+
+  //   Moralis.Web3.onAccountsChanged(() => {
+  //     logout();
+  //       toast({
+  //         title: "Account changed, please login.",
+  //         status: "warning",
+  //         duration: 2000,
+  //         isClosable: true,
+  //   });
+  // }
+
+  Moralis.Web3.onAccountsChanged(() => {
+    logout();
+    toast({
+      title: "Account changed, please login.",
+      status: "warning",
+      duration: 2000,
+      isClosable: true,
+    });
+  });
+
+  const authenticateWallet = () => {
+    authenticate({
+      signingMessage: "Sign message to confirm ownership of address",
+      onError: () =>
+        toast({
+          title: "User declined request.",
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        }),
+      onSuccess: () =>
+        toast({
+          title: "Connected Succesfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        }),
+    });
+  };
+
   const AuthState = () => {
-    checkWeb3();
     if (isAuthenticated) {
       dispatch(updateAddress(user?.get("ethAddress")!));
       return (
@@ -59,11 +105,7 @@ const AuthButtons = () => {
         <Button
           m={2}
           isLoading={isAuthenticating}
-          onClick={() =>
-            authenticate({
-              signingMessage: "Sign message to confirm ownership of address",
-            })
-          }
+          onClick={() => authenticateWallet()}
         >
           {values}
         </Button>

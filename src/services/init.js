@@ -15,6 +15,10 @@ export async function initWeb3() {
 }
 
 export async function getNetwork() {
+  if (window.ethereum) {
+    let web3 = new Web3(window.ethereum);
+    return web3.eth.net.getId();
+  }
   if (window.ethereum || window.web3) {
     return web3.eth.net.getId();
   }

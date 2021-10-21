@@ -1,48 +1,55 @@
 import { Grid, GridItem, Link, Text, VStack } from "@chakra-ui/layout";
+import { useToast } from "@chakra-ui/react";
 import "./Dashboard.css";
 import Content from "../components/Content";
 import Navbar from "../components/Navbar";
+import { useMoralis } from "react-moralis";
 import { initWeb3, getNetwork, getNetworkName } from "../services/init";
 import { useState, useEffect } from "react";
-import Moralis from "moralis";
 import { Button } from "@chakra-ui/button";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { update } from "../features/network/network-slice";
+import { updateAddress } from "../features/network/network-slice";
 import NetworkState from "../features/network/NetworkState";
+import SetWeb3Environment from "../services/NetworkTracker";
+declare let window: any;
 
 function Dashboard() {
+  const dispatch = useAppDispatch();
+  const toast = useToast();
   const [re, setRe] = useState(false);
 
   const [hasWeb3, setWeb3] = useState(false);
+  const web3 = useAppSelector((state) => state.network.web3);
 
   let chainIdDefault: number = 1;
   const [chainId, setChainId] = useState(chainIdDefault);
 
-  Moralis.Web3.onChainChanged(function () {
-    setRe(!re);
-  });
+  const { isAuthenticated, Moralis, user, logout } = useMoralis();
 
-  useEffect(() => {
-    async function hasMetamask() {
-      let result = await initWeb3();
-      if (result) {
-        setWeb3(true);
-      } else setWeb3(false);
+  // Moralis.Web3.onChainChanged(function () {
+  //   setRe(!re);
+  // });
+  async function getTheChainId() {
+    let result = await getNetwork();
+    if (result === 1 || result === 4 || result === 137) {
+      setChainId(result);
+    } else {
+      setChainId(42069);
     }
-    hasMetamask();
+  }
+  //getTheChainId();
+  // let accounts: string[] = [];
+  // const fetch = async () => {
+  //   accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  // };
+  // window.ethereum.on("accountsChanged", () => {
+  //   fetch();
+  //   dispatch(updateAddress(accounts[0]));
+  // });
 
-    async function getTheChainId() {
-      let result = await getNetwork();
-      if (result === 1 || result === 4 || result === 137) {
-        setChainId(result);
-      } else {
-        setChainId(42069);
-      }
-    }
-    getTheChainId();
-  });
-
-  if (hasWeb3) {
+  if (web3) {
     return (
       <Grid templateRows="repeat(10,1fr)" h="100vh">
         <GridItem rowSpan={1}>

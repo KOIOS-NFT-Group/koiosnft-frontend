@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Web3 from "web3";
 import NetworkState from "./NetworkState";
 
+declare let window: any;
+
 const initialState: NetworkState = {
   loading: false,
   chainId: 1,
   network: "eth",
-  web3: false,
+  web3: null,
   account: "",
 };
 
@@ -14,24 +16,17 @@ const networkSlice = createSlice({
   name: "network",
   initialState,
   reducers: {
-    update(state, action: PayloadAction<NetworkState>) {
-      state.loading = action.payload.loading;
-      state.network = action.payload.network;
-      state.chainId = action.payload.chainId;
-      state.account = action.payload.account;
-    },
-    toggleLoading(state) {
-      state.loading = !state.loading;
-    },
     setWeb3(state, action: PayloadAction<boolean>) {
-      state.web3 = action.payload;
+      if (action.payload) {
+        state.web3 = new Web3(window.ethereum);
+      }
     },
     updateAddress(state, action: PayloadAction<string>) {
+      console.log("Account: " + action.payload);
       state.account = action.payload;
     },
   },
 });
 
-export const { update, toggleLoading, setWeb3, updateAddress } =
-  networkSlice.actions;
+export const { setWeb3, updateAddress } = networkSlice.actions;
 export default networkSlice.reducer;
